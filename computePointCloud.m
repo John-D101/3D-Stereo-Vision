@@ -1,21 +1,21 @@
 clear variables; close all; clc;
-
-%% Generate the circle pattern world points
+%% Calibrate the camera parameters
+%Generate the world points for the circle grid
 numSide = 2; %Number of dots on the single side row of the pattern
 numTop = 4; %Number of dots in first 2 rows of pattern
 centreDistance = 5; %Distance between circles on the same row in mm
 patternDims = [numSide, numTop];
-
 worldPoints = generateCircleGridPoints(patternDims, centreDistance);
 
-%% Detect the calibration pattern from the calibration image set
+% Detect the calibration pattern from the calibration image set
 calibImageDir = "Calibration Set";
 calibLeftImages = imageDatastore(fullfile(calibImageDir,"left\"));
 calibRightImages = imageDatastore(fullfile(calibImageDir,"right\"));
 [imagePoints, imagesUsed] = detectCircleGridPoints(calibLeftImages.Files, calibRightImages.Files, patternDims);
-
-%% Calibrate the camera parameters and rectify the dataset
 stereoCamPara = estimateCameraParameters(imagePoints, worldPoints, ImageSize=[768,1024]);
+
+%% Rectify the original dataset and save a copy of it then make a point cloud
+%Read the images
 sampleImageDir = "Run _\";
 sampleLeftImages = imageDatastore(fullfile(sampleImageDir,"raw\left\"));
 sampleRightImages = imageDatastore(fullfile(sampleImageDir,"raw\right\"));
