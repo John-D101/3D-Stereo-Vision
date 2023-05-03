@@ -11,7 +11,7 @@ ReProj = reproj_mat(ProjLeft, ProjRight);
 
 %Read the disparity map in and adjust the invalid values to zero
 disparityRaw = depth(:,:,1);
-depth(depth==0.501960784313726) = NaN;
+depth(logical((round(depth(:,:,1),4)==0.5020) .* (round(depth(:,:,2),4)==0.5020) .* (round(depth(:,:,3),4)==0.5020))) = NaN;
 
 %Display all three disparity maps to verify it worked
 subplot(1,2,1)
