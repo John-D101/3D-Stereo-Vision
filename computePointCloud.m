@@ -27,14 +27,15 @@ for image_num = 1:size(sampleLeftImages.Files,1)
     disparityMap = disparitySGM(rgb2gray(J1),rgb2gray(J2));
     xyzPoints = reconstructScene(disparityMap,ReProj);
     ptCloudNoise = pointCloud(xyzPoints./1000,"Color",J1);
-    ptCloudRed = pcdenoise(ptCloudNoise, NumNeighbors=4);
+    ptCloudRed = pcdenoise(ptCloudNoise, NumNeighbors=10);
+    ptCloudRed = select(ptCloudRed, findPointsInROI(ptCloudRed, [-0.5 0.5 -0.1 0.5 -0.5 0.5]));
     pcwrite(ptCloudRed, fullfile(sampleImageDir,"pcloud\", strcat(sampleRightImages.Files{image_num}(end-21:end-4),".ply")))
 end
 
 %% Join the point clouds together
 % Initial parameters
 gridSize = 0.01;
-mergeSize = 0.015;
+mergeSize = 0.0005;
 
 %Read the initial point cloud
 ptCloudRef = pcread(fullfile(sampleImageDir,"pcloud\", strcat(sampleRightImages.Files{1}(end-21:end-4),".ply")));
