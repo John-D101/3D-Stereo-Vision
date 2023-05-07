@@ -28,8 +28,8 @@ for image_num = 1:size(sampleLeftImages.Files,1)
     disparityMap = disparitySGM(rgb2gray(J1),rgb2gray(J2));
     xyzPoints = reconstructScene(disparityMap,ReProj);
     ptCloudNoise = pointCloud(xyzPoints./1000,"Color",J1);
-    ptCloudRed = pcdenoise(ptCloudNoise, NumNeighbors=10);
-    ptCloudRed = select(ptCloudRed, findPointsInROI(ptCloudRed, [-0.5 0.5 -0.1 0.5 -0.5 0.5]));
+    ptCloudRed = select(ptCloudNoise, findPointsInROI(ptCloudNoise, [-0.5 0.5 -0.1 0.5 -0.5 0.5]));
+    ptCloudRed = pcdenoise(ptCloudRed, NumNeighbors=10);
     ptCloudGrouped{image_num} = ptCloudRed;
     %pcwrite(ptCloudRed, fullfile(sampleImageDir,"/pcloud", strcat(sampleRightImages.Files{image_num}(end-21:end-4),".ply")))
 end
