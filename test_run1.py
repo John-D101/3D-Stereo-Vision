@@ -16,7 +16,7 @@ plt.subplot(1, 2, 2)
 plt.imshow(rgbd_image.depth)
 plt.show()
 
-pcd=o3d.io.read_point_cloud("Run 2\pcloud\image000000_3d.ply")
+pcd=o3d.io.read_point_cloud("Run 2\pcloud\image000001_3d.ply")
 #o3d.visualization.draw_geometries([rgbd_image])
 
 cam_prop = o3d.camera.PinholeCameraIntrinsic()
@@ -24,4 +24,4 @@ cam_prop.height = 768
 cam_prop.width = 1024
 cam_prop.intrinsic_matrix = [[872.76442, 0, -766.876], [0, 872.76442, -574.1995], [0, 0, 1]]
 pcd_comp = o3d.geometry.PointCloud.create_from_rgbd_image(rgbd_image, cam_prop)
-o3d.visualization.draw_geometries([pcd_comp])
+o3d.visualization.draw_geometries([pcd])
