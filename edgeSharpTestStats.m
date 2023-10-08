@@ -35,16 +35,15 @@ for image_num = 1:size(sampleLeftImages.Files,1)
     xyzPoints = reconstructScene(disparityMap,ReProj);
     ptCloudNoise = pointCloud(xyzPoints./1000,"Color",J1);
 
-    % hAxes = pcshow(ptCloudNoise,'VerticalAxis','Y','VerticalAxisDir','Down');
-    % title('Current world')
-    % xlabel('X (m)')
-    % ylabel('Y (m)')
-    % zlabel('Z (m)')
+    hAxes = pcshow(ptCloudNoise,'VerticalAxis','Y','VerticalAxisDir','Down');
+    title('Current world')
+    xlabel('X (m)')
+    ylabel('Y (m)')
+    zlabel('Z (m)')
     % ptRegion = input("What region is the point cloud?");
 
-    % Not used since the region of interest is large
-    %ptCloudRed = select(ptCloudNoise, findPointsInROI(ptCloudNoise, [-0.2 0.2 -0.2 0.2 -0.2 0.3]));
-    ptCloudRed = ptCloudNoise;
+    ptCloudRed = select(ptCloudNoise, findPointsInROI(ptCloudNoise, [-1 1 -1 1 -1 0.4]));
+    %ptCloudRed = ptCloudNoise;
 
     ptCloudRed = pcdenoise(ptCloudRed, NumNeighbors=10);
     ptCloudGrouped{image_num} = ptCloudRed;
@@ -60,7 +59,10 @@ ptCloudTrimmed = cell(size(ptCloudGrouped,1),size(ptCloudGrouped,2));
 for pc_num = 1:2:size(ptCloudGrouped,2)*2
     %Include all points that are within 1cm of the proposed cylinder
     [model,inlierIndices,outlierIndices,meanError] = pcfitcylinder(ptCloudGrouped{(pc_num+1)/2}, 0.01);
-    ptCloudTrimmed{(pc_num+1)/2} = select(ptCloudGrouped{(pc_num+1)/2}, inlierIndices);
+
+    %ptCloudTrimmed{(pc_num+1)/2} = select(ptCloudGrouped{(pc_num+1)/2}, inlierIndices);
+    ptCloudTrimmed{(pc_num+1)/2} = ptCloudGrouped{(pc_num+1)/2};
+    
     fittedCylModel(1,pc_num) = {model};
     fittedCylModel(1,pc_num+1) = {meanError};
 end

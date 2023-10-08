@@ -102,7 +102,7 @@ for pc_num = 1:2:size(ptCloudTrimmed,2)*2
     fittedPlaneModel(2,pc_num) = {histogram(distArray)};
     xlabel("Perpendicular distance from plane (m)")
     ylabel("Frequency of distance")
-    title(sprintf("Grid = %s",gridText((pc_num+1)/2)))
+    title(sprintf("Sample Number = %d", (pc_num+1)/2))
     %exportgraphics(fittedPlaneModel{2,pc_num}, sprintf("BestFitPointCloud%s.png",pc_num))
    
     %fittedPlaneModel(2,pc_num) = {fitdist(distArray',"normal")};
